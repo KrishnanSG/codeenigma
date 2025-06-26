@@ -1,0 +1,64 @@
+[tool.poetry]
+name = "pycodeenigma"
+version = "0.1.0"
+description = "A Python package for code obfuscation using AES and Base64 encryption"
+authors = ["Krishnan S G <krishsg525@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "pycodeenigma"}]
+
+[tool.poetry.scripts]
+codeenigma = "pycodeenigma.cli:main"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+cryptography = "^45.0.4"
+typer = {extras = ["all"], version = "^0.16.0"}
+rich = "^14.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-cov = "^4.1.0"
+ruff = "^0.12.0"
+
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle errors
+    "W", # pycodestyle warnings
+    "F", # pyflakes
+    "I", # isort
+    "B", # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+
+ignore = [
+    "E501", # line too long, handled by black
+    "B008", # do not perform function calls in argument defaults
+    "C901", # too complex
+    "W191", # indentation contains tabs
+]
+
+# Pydocstyle settings for docstring conventions
+[lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+force-single-line = false
+
+# Formatting settings
+[format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+docstring-code-format = true
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.coverage.run]
+relative_files = true
