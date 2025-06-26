@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from src.core import obfuscate_file
+from src.private import NONCE, SECRET_KEY
 
 
 class Orchestrator:
@@ -21,6 +22,65 @@ execute_secure_code({repr(secure_code)}, globals())
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(runtime_embedded_code)
 
+    def generate_runtime(self):
+        """Generate the runtime code."""
+        runtime_code = f"""
+import base64
+import marshal
+import zlib
+import types
+
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+NONCE = {NONCE}
+SECRET_KEY = {SECRET_KEY}
+
+def execute_secure_code(secure_code: bytes, globals_dict=None) -> bytes:
+
+    if globals_dict is None:
+        globals_dict = globals()
+
+    # Decrypt the obfuscated code
+    aesgcm = AESGCM(SECRET_KEY)
+    decrypted = aesgcm.decrypt(NONCE, secure_code, associated_data=None)
+
+    # Decode and decompress
+    compressed = base64.b64decode(decrypted)
+    marshaled = zlib.decompress(compressed)
+
+    # Unmarshal to get the code object
+    code_obj = marshal.loads(marshaled)
+
+    if isinstance(code_obj, types.CodeType):
+        exec(code_obj, globals_dict)
+    else:
+        raise ValueError("Invalid code object in obfuscated module")
+"""
+        with open("codeenigma.pyx", "w", encoding="utf-8") as f:
+            f.write(runtime_code)
+
+        # run setup.py to compile the Cython code
+        import subprocess
+
+        subprocess.run(
+            ["poetry", "run", "python", "codeenigma_setup.py", "build_ext", "--inplace"]
+        )
+
+        print("Runtime code generated and compiled successfully.")
+
+        # Move the generated .so file to the output directory
+        import platform
+        import shutil
+        import sys
+
+        # Get Python version and platform
+        py_version = f"{sys.version_info.major}{sys.version_info.minor}"
+        platform_str = platform.system().lower()
+        so_file = f"codeenigma.cpython-{py_version}-{platform_str}.so"
+
+        # Copy the generated .so file to the output directory
+        shutil.move(so_file, self.output_dir / so_file)
+
     def obfuscate_module(self):
         """Obfuscate the entire module."""
 
@@ -33,5 +93,7 @@ execute_secure_code({repr(secure_code)}, globals())
 
             self.create_obfuscation_file(py_file, output_path)
 
-        print("Obfuscation complete. Files saved to:", self.output_dir)
+        # Generate the runtime code
+        self.generate_runtime()
 
+        print("Obfuscation complete. Files saved to:", self.output_dir)
