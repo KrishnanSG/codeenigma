@@ -1,5 +1,5 @@
 """
-CLI interface for PyCodeEnigma orchestrator.
+CLI interface for CodeEnigma orchestrator.
 """
 
 from pathlib import Path
@@ -74,7 +74,7 @@ def obfuscate(
 
 @app.command()
 def version():
-    """Show the version of PyCodeEnigma."""
+    """Show the version of CodeEnigma."""
     console.print("CodeEnigma CLI v1.0.0")
 
 

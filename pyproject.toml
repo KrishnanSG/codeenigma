@@ -1,14 +1,13 @@
 [tool.poetry]
-name = "pycodeenigma"
-version = "0.1.0"
+name = "codeenigma"
+version = "1.0.0"
 description = "A Python package for code obfuscation using AES and Base64 encryption"
 authors = ["Krishnan S G <krishsg525@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "pycodeenigma"}]
 
 [tool.poetry.scripts]
-codeenigma = "pycodeenigma.cli:main"
+codeenigma = "codeenigma.cli:app"
 
 [tool.poetry.dependencies]
 python = "^3.12"
