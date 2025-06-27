@@ -22,15 +22,20 @@ def display_banner():
 [bold yellow]License:[/bold yellow] MIT
 [bold yellow]Author:[/bold yellow] KrishnanSG
 [bold yellow]Version:[/bold yellow] 1.0.0""",
-            title=f"🚀 [bold cyan]Welcome to CodeEnigma[/bold cyan]",
+            title="🚀 [bold cyan]Welcome to CodeEnigma[/bold cyan]",
             border_style="bright_magenta",
         )
     )
 
+
 @app.command()
 def obfuscate(
-    module_path: str = typer.Argument(..., help="Path to the Python module to obfuscate"),
-    output_dir: str = typer.Option("dist", "--output", "-o", "--dist", help="Output directory for obfuscated files"),
+    module_path: str = typer.Argument(
+        ..., help="Path to the Python module to obfuscate"
+    ),
+    output_dir: str = typer.Option(
+        "dist", "--output", "-o", "--dist", help="Output directory for obfuscated files"
+    ),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Show detailed output"),
 ):
     """Obfuscate a Python module and its dependencies."""
@@ -38,11 +43,15 @@ def obfuscate(
 
     module_path = Path(module_path)
     if not module_path.exists():
-        console.print(f"[bold red]Error: Module path '{module_path}' does not exist[/bold red]")
+        console.print(
+            f"[bold red]Error: Module path '{module_path}' does not exist[/bold red]"
+        )
         raise typer.Exit(1)
 
     if not module_path.is_dir():
-        console.print("[bold red]Error: Module path must be a directory containing Python files[/bold red]")
+        console.print(
+            "[bold red]Error: Module path must be a directory containing Python files[/bold red]"
+        )
         raise typer.Exit(1)
 
     orchestrator = Orchestrator(str(module_path), output_dir)
@@ -53,7 +62,9 @@ def obfuscate(
         orchestrator.obfuscate_module()
 
         if verbose:
-            console.print("\n[bold green]Obfuscation completed successfully![/bold green]")
+            console.print(
+                "\n[bold green]Obfuscation completed successfully![/bold green]"
+            )
             console.print(f"Output files saved to: {Path(output_dir).resolve()}")
 
     except Exception as e:

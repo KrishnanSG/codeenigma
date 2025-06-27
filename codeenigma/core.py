@@ -4,7 +4,7 @@ import zlib
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
-from src.private import NONCE, SECRET_KEY
+from codeenigma.private import NONCE, SECRET_KEY
 
 
 def obfuscate_file(file_path: str) -> bytes:
