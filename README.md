@@ -1,15 +1,20 @@
-# PyCodeEnigma
+# CodeEnigma
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 
-A Python package for code obfuscation using AES-256 and Base64 encryption. PyCodeEnigma helps protect your Python code by encrypting it while maintaining its functionality.
+CodeEnigma is a Python package for lightweight code obfuscation using AES-256 encryption and Base64 encoding. It helps protect your Python code from prying eyes while preserving full functionality.
+
+## 🔒 Why CodeEnigma?
+After searching extensively for a free and open-source Python obfuscation tool, I realized that most available options were either paid, closed-source, or opaque in how they worked. I wasn't comfortable letting a black-box tool encrypt my production code without knowing exactly what it was doing — especially when it had access to sensitive logic.
+
+So I built **CodeEnigma** — a transparent, self-contained solution that gives you full control over the obfuscation process, with no hidden logic and no external servers involved.
 
 ## Features
 
 - 🔒 Strong encryption using AES-256
-- 🔄 Simple API for obfuscating and deobfuscating code
-- 🔑 Secure key generation and management
+- 🔄 Simple API for obfuscating any python module
+- 🔑 Secure and dynamic key generation
 - 🛠️ Command-line interface for easy integration into build processes
 - 📦 Lightweight and dependency-minimal
 
@@ -18,126 +23,57 @@ A Python package for code obfuscation using AES-256 and Base64 encryption. PyCod
 Using Poetry:
 
 ```bash
-poetry add pycodeenigma
+poetry add codeenigma
 ```
 
 Using pip:
 
 ```bash
-pip install pycodeenigma
+pip install codeenigma
 ```
 
 ## Usage
 
+CodeEnigma comes with a user-friendly command-line interface powered by Typer. The CLI provides helpful prompts and rich output.
+
 ### Basic Usage
 
-```python
-from pycodeenigma import (
-    generate_key,
-    obfuscate_code,
-    deobfuscate_code,
-    save_key,
-    load_key
-)
-
-# Generate a secure key
-password = b"your-strong-password"
-key = generate_key(password)
-
-# Save the key for later use
-save_key(key, "secret.key")
-
-# Later, load the key
-key = load_key("secret.key")
-
-
-# Your Python code
-code = """
-def hello():
-    print("Hello, World!")
-"""
-
-# Obfuscate the code
-obfuscated = obfuscate_code(code, key)
-print(f"Obfuscated code: {obfuscated}")
-
-# Deobfuscate the code
-deobfuscated = deobfuscate_code(obfuscated, key)
-print(f"Deobfuscated code: {deobfuscated}")
-```
-
-### Command Line Interface
-
-PyCodeEnigma comes with a user-friendly command-line interface powered by Typer. The CLI provides helpful prompts and rich output.
-
-#### Generate a new encryption key
+To obfuscate a Python module:
 
 ```bash
-pycodeenigma generate-key --password "your-strong-password" --output secret.key
+codeenigma obfuscate /path/to/your/module
 ```
 
-You'll be prompted to enter the password if not provided:
+### Command Line Options
 
+- `--expiration`, `-e`: Set an expiration date for the obfuscated code (YYYY-MM-DD)
+- `--output`, `-o`, `--dist`: Specify output directory (default: 'dist')
+- `--verbose`, `-v`: Show detailed output
+
+#### Examples
+
+Obfuscate with an expiration date:
+
+> _The following example will obfuscate the module and set the expiration date to December 31, 2025, at 23:59:59+0530 (IST)._
 ```bash
-pycodeenigma generate-key --output secret.key
+codeenigma obfuscate /path/to/your/module -e "2025-12-31 23:59:59+0530"
 ```
 
-#### Obfuscate a Python file
-
+Specify custom output directory:
 ```bash
-pycodeenigma obfuscate my_script.py --key secret.key --output obfuscated_script.py
+codeenigma obfuscate /path/to/your/module -o custom_output
 ```
 
-With optional author metadata:
+### Version Information
 
+To check the installed version:
 ```bash
-pycodeenigma obfuscate my_script.py --key secret.key --author "John Doe" --output obfuscated_script.py
+codeenigma version
 ```
-
-#### Deobfuscate a file
-
-```bash
-pycodeenigma deobfuscate obfuscated_script.py --key secret.key --output deobfuscated_script.py
-```
-
-#### Using stdin/stdout
-
-You can use `-` for stdin/stdout:
-
-```bash
-# Obfuscate from stdin to stdout
-cat script.py | pycodeenigma obfuscate - --key secret.key
-
-# Deobfuscate from stdin to file
-cat obfuscated.py | pycodeenigma deobfuscate - --key secret.key --output deobfuscated.py
-```
-
-#### Getting Help
-
-For a list of all available commands and options:
-
-```bash
-pycodeenigma --help
-```
-
-For help on a specific command:
-
-```bash
-pycodeenigma obfuscate --help
-pycodeenigma deobfuscate --help
-pycodeenigma generate-key --help
-```
-
-## Security Notes
-
-- The security of your obfuscated code depends on keeping the encryption key secure.
-- Obfuscation is not a substitute for proper security practices.
-- Always use strong, unique passwords for key generation.
-- Keep your encryption keys secure and never commit them to version control.
 
 ## Contributing
 
-Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details.
+Contributions are welcome! This is a complete free and open-source project. If you have any suggestions or find any bugs, please open an [issue](https://github.com/KrishnanSG/CodeEnigma/issues/new).
 
 ## License
 
