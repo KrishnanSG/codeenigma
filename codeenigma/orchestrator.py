@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from pathlib import Path
 from shutil import rmtree
 
@@ -9,9 +10,15 @@ from codeenigma.private import NONCE, SECRET_KEY
 
 
 class Orchestrator:
-    def __init__(self, module_path: str, output_dir: str = "dist"):
+    def __init__(
+        self,
+        module_path: str,
+        output_dir: str = "dist",
+        expiration_date: datetime = None,
+    ):
         self.module_path = Path(module_path)
         self.output_dir = Path(output_dir)
+        self.expiration_date = expiration_date
 
     def create_obfuscation_file(self, file_path: str, output_path: str):
         secure_code = obfuscate_file(file_path)
@@ -74,18 +81,36 @@ setup(
 
     def generate_runtime(self):
         """Generate the runtime code."""
-        runtime_code = f"""
+        if self.expiration_date:
+            rich.print(
+                f"\n[bold yellow]Note:[/bold yellow] The obfuscated code will expire on {self.expiration_date.strftime('%B %d, %Y %I:%M %p')}\n"
+            )
+            self.expiration_date = self.expiration_date.isoformat()
+
+        runtime_code = f"""from datetime import datetime, UTC
 import base64
 import marshal
 import zlib
 import types
-
-from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+try:
+    import rich
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+except ModuleNotFoundError:
+    print("Error: rich and cryptography modules are required to run this code. Please install them using pip install rich cryptography or using poetry add rich cryptography.")
+    exit(1)
 
 NONCE = {NONCE}
 SECRET_KEY = {SECRET_KEY}
 
+
 def execute_secure_code(secure_code: bytes, globals_dict=None) -> bytes:
+
+    if '{self.expiration_date}' != 'None':
+        EXPIRATION_DATETIME = datetime.fromisoformat('{self.expiration_date}')
+        now = datetime.now(tz=UTC)
+        if now > EXPIRATION_DATETIME:
+            rich.print("[bold red]Code expired on[/bold red]",EXPIRATION_DATETIME.strftime('%B %d, %Y %I:%M %p'),"[bold red] as per build time. This code can't be executed any further. Request the module owner to provide you with a new code. [/bold red]")
+            exit(1)
 
     if globals_dict is None:
         globals_dict = globals()

@@ -2,6 +2,7 @@
 CLI interface for CodeEnigma orchestrator.
 """
 
+from datetime import UTC, datetime
 from pathlib import Path
 
 import typer
@@ -18,7 +19,7 @@ def display_banner():
     """Display a nice CLI banner."""
     console.print(
         Panel.fit(
-            """[bold green]A simple, secure and FOSS python code obfuscator using AES and Base64, executed on Cython built runtime for added security. Each file is obfuscated separately using a unique ke generated during the initialization.[/bold green]
+            """[bold green]A simple, secure and FOSS python code obfuscator using AES and Base64, executed on Cython built runtime for added security. Each file is obfuscated separately using a unique key generated during the initialization.[/bold green]
 [bold yellow]License:[/bold yellow] MIT
 [bold yellow]Author:[/bold yellow] KrishnanSG
 [bold yellow]Version:[/bold yellow] 1.0.0""",
@@ -32,6 +33,12 @@ def display_banner():
 def obfuscate(
     module_path: str = typer.Argument(
         ..., help="Path to the Python module to obfuscate"
+    ),
+    expiration_date: str = typer.Option(
+        None,
+        "--expiration",
+        "-e",
+        help="Expiration date for the obfuscated code (YYYY-MM-DD)",
     ),
     output_dir: str = typer.Option(
         "dist", "--output", "-o", "--dist", help="Output directory for obfuscated files"
@@ -54,7 +61,24 @@ def obfuscate(
         )
         raise typer.Exit(1)
 
-    orchestrator = Orchestrator(str(module_path), output_dir)
+    if expiration_date:
+        try:
+            expiration_date = datetime.fromisoformat(expiration_date)
+        except ValueError:
+            console.print(
+                "[bold red]Error: Invalid expiration date format. Please use YYYY-MM-DD HH:MM:SS+0000[/bold red]"
+            )
+            raise typer.Exit(1) from None
+
+    if expiration_date and expiration_date < datetime.now(tz=UTC):
+        console.print(
+            "[bold red]Error: Expiration date must be in the future[/bold red]"
+        )
+        raise typer.Exit(1)
+
+    orchestrator = Orchestrator(
+        str(module_path), output_dir, expiration_date=expiration_date
+    )
 
     try:
         if verbose:
