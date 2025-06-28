@@ -9,6 +9,7 @@ import typer
 from rich.console import Console
 from rich.panel import Panel
 
+from codeenigma import __version__
 from codeenigma.orchestrator import Orchestrator
 
 app = typer.Typer(name="codeenigma", add_completion=True)
@@ -19,10 +20,10 @@ def display_banner():
     """Display a nice CLI banner."""
     console.print(
         Panel.fit(
-            """[bold green]A simple, secure and FOSS python code obfuscator using AES and Base64, executed on Cython built runtime for added security. Each file is obfuscated separately using a unique key generated during the initialization.[/bold green]
+            f"""[bold green]A simple, secure and FOSS python code obfuscator using AES and Base64, executed on Cython built runtime for added security. Each file is obfuscated separately using a unique key generated during the initialization.[/bold green]
 [bold yellow]License:[/bold yellow] MIT
 [bold yellow]Author:[/bold yellow] KrishnanSG
-[bold yellow]Version:[/bold yellow] 1.0.0""",
+[bold yellow]Version:[/bold yellow] {__version__}""",
             title="🚀 [bold cyan]Welcome to CodeEnigma[/bold cyan]",
             border_style="bright_magenta",
         )
@@ -99,7 +100,7 @@ def obfuscate(
 @app.command()
 def version():
     """Show the version of CodeEnigma."""
-    console.print("CodeEnigma CLI v1.0.0")
+    console.print(f"CodeEnigma CLI v{__version__}")
 
 
 if __name__ == "__main__":
