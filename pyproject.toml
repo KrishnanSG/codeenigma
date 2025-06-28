@@ -5,6 +5,11 @@ description = "A Python package for code obfuscation using AES and Base64 encryp
 authors = ["Krishnan S G <krishsg525@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+urls = { 
+    "Homepage" = "https://github.com/KrishnanSG/codeenigma",
+    "Source" = "https://github.com/KrishnanSG/codeenigma",
+    "Tracker" = "https://github.com/KrishnanSG/codeenigma/issues"
+}
 
 [tool.poetry.scripts]
 codeenigma = "codeenigma.cli:app"
