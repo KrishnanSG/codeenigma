@@ -1,4 +1,4 @@
-# CodeEnigma
+![Image](static/logo.svg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
@@ -11,6 +11,25 @@ After searching extensively for a free and open-source Python obfuscation tool, 
 So I built **CodeEnigma** — a transparent, self-contained solution that gives you full control over the obfuscation process, with no hidden logic and no external servers involved. 
 
 This project is inspired by [PyArmor](https://pyarmor.dashingsoft.com/) but with a different approach.
+
+## High Level Architecture
+
+![Image](static/CodeEnigma.HLD.svg)
+
+The working principle of CodeEnigma is simple:
+1. The user provides the path to the Python module to obfuscate.
+2. CodeEnigma reads the module's source code.
+3. An AES-256 key is generated using a secure random number generator and set in `private.py`
+4. Obfuscation runs file by file running the following steps:
+   * 4.1. Compile using `compile(code, str(file_path), "exec")` 
+   * 4.2. Compress the byte code using `zlib.compress(compiled_code)`
+   * 4.3. Encode the compressed byte code using `base64.b64encode(compressed_code)`
+   * 4.4. Encrypt the encoded byte code using `AESGCM(SECRET_KEY).encrypt(NONCE, obfuscated, associated_data=None)`
+   _[refer for more details](codeenigma/core.py)_:
+5. CodeEnigma creates a new module with the obfuscated code.
+6. A codeenigma_runtime.pyx file is created with the deobfuscation logic to decrypt and execute the obfuscated code.
+7. The runtime is compiled to a Python extension module using Cython. Also generates a codeenigma_runtime.whl file for distribution.
+8. End of process, the obfuscated module is ready to be distributed as wheel files.
 
 ## Features
 
@@ -85,3 +104,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Built with ❤️ using Python
 - Uses [cryptography](https://cryptography.io/) for secure encryption
+- Uses [Cython](https://cython.org/) for compiling the runtime
+- Logo Credits, Claude 🫡

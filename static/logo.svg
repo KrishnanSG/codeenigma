@@ -1,0 +1,104 @@
+<svg viewBox="0 0 320 80" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Wood grain gradient -->
+    <linearGradient id="woodGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8B4513"/>
+      <stop offset="30%" stop-color="#A0522D"/>
+      <stop offset="70%" stop-color="#654321"/>
+      <stop offset="100%" stop-color="#3E2723"/>
+    </linearGradient>
+    
+    <!-- Black Bakelite gradient -->
+    <linearGradient id="bakeliteGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2E2E2E"/>
+      <stop offset="50%" stop-color="#1A1A1A"/>
+      <stop offset="100%" stop-color="#0F0F0F"/>
+    </linearGradient>
+    
+    <!-- Brass key gradient -->
+    <radialGradient id="keyGrad" cx="0.3" cy="0.3">
+      <stop offset="0%" stop-color="#DAA520"/>
+      <stop offset="70%" stop-color="#B8860B"/>
+      <stop offset="100%" stop-color="#8B6914"/>
+    </radialGradient>
+    
+    <!-- Light bulb glow -->
+    <filter id="bulbGlow">
+      <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Main Enigma machine representation -->
+  <g transform="translate(70, 40)">
+    <!-- Wooden case (like the brown one in image) -->
+    <rect x="-35" y="-30" width="70" height="60" rx="4" fill="url(#woodGrad)" stroke="#5D4037" stroke-width="1"/>
+    
+    <!-- Case lid detail -->
+    <rect x="-33" y="-28" width="66" height="10" rx="2" fill="#6D4C41" opacity="0.7"/>
+    
+    <!-- Black Bakelite base (like the machines in image) -->
+    <rect x="-30" y="-12" width="60" height="42" rx="3" fill="url(#bakeliteGrad)" stroke="#333" stroke-width="1"/>
+    
+    <!-- Lampboard (the iconic light-up letters) -->
+    <g transform="translate(0, -20)">
+      <!-- Light bulbs in perfect grid pattern -->
+      <circle cx="-18" cy="0" r="3.5" fill="#FFE082" stroke="#FFC107" stroke-width="0.5" filter="url(#bulbGlow)" opacity="0.9"/>
+      <circle cx="-6" cy="0" r="3.5" fill="#FFE082" stroke="#FFC107" stroke-width="0.5" filter="url(#bulbGlow)" opacity="0.9"/>
+      <circle cx="6" cy="0" r="3.5" fill="#FFE082" stroke="#FFC107" stroke-width="0.5" filter="url(#bulbGlow)" opacity="0.9"/>
+      <circle cx="18" cy="0" r="3.5" fill="#FFE082" stroke="#FFC107" stroke-width="0.5" filter="url(#bulbGlow)" opacity="0.9"/>
+      
+      <!-- Letters on bulbs -->
+      <text x="-18" y="2" font-family="serif" font-size="4.5" fill="#8B6914" text-anchor="middle" font-weight="bold">C</text>
+      <text x="-6" y="2" font-family="serif" font-size="4.5" fill="#8B6914" text-anchor="middle" font-weight="bold">O</text>
+      <text x="6" y="2" font-family="serif" font-size="4.5" fill="#8B6914" text-anchor="middle" font-weight="bold">D</text>
+      <text x="18" y="2" font-family="serif" font-size="4.5" fill="#8B6914" text-anchor="middle" font-weight="bold">E</text>
+    </g>
+    
+        <!-- Three control knobs -->
+    <g transform="translate(0, 12)">
+      <!-- Knob bases -->
+      <circle cx="-15" cy="-10" r="6" fill="#333" stroke="#666" stroke-width="1"/>
+      <circle cx="0" cy="-10" r="6" fill="#333" stroke="#666" stroke-width="1"/>
+      <circle cx="15" cy="-10" r="6" fill="#333" stroke="#666" stroke-width="1"/>
+      
+      <!-- Knob tops with gradient -->
+      <circle cx="-15" cy="-10" r="4.5" fill="url(#keyGrad)" stroke="#8B6914" stroke-width="0.8"/>
+      <circle cx="0" cy="-10" r="4.5" fill="url(#keyGrad)" stroke="#8B6914" stroke-width="0.8"/>
+      <circle cx="15" cy="-10" r="4.5" fill="url(#keyGrad)" stroke="#8B6914" stroke-width="0.8"/>
+      
+      <!-- Knob indicators (pointer lines) -->
+      <line x1="-15" y1="-14" x2="-15" y2="-12" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="0" y1="-14" x2="0" y2="-12" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="15" y1="-14" x2="15" y2="-12" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      
+      <!-- Knob labels -->
+      <text x="-15" y="0" font-family="serif" font-size="4" fill="#666" text-anchor="middle" font-weight="bold">I</text>
+      <text x="0" y="0" font-family="serif" font-size="4" fill="#666" text-anchor="middle" font-weight="bold">II</text>
+      <text x="15" y="0" font-family="serif" font-size="4" fill="#666" text-anchor="middle" font-weight="bold">III</text>
+    </g>
+    
+    
+    <!-- Code angle brackets integrated -->
+    <text x="-60" y="10" font-family="'Courier New', monospace" font-size="28" fill="#8B4513" font-weight="bold">&lt;</text>
+    <text x="40" y="10" font-family="'Courier New', monospace" font-size="28" fill="#8B4513" font-weight="bold">&gt;</text>
+    
+    <!-- Manufacturer plate (like "ENIGMA" oval in image) -->
+    <ellipse cx="0" cy="22" rx="20" ry="5" fill="#8B4513" stroke="#DAA520" stroke-width="1"/>
+    <text x="0" y="25" font-family="serif" font-size="7" fill="#DAA520" text-anchor="middle" font-weight="bold">ENIGMA</text>
+  </g>
+  
+  <!-- Typography inspired by German engineering -->
+  <text x="140" y="45" font-family="'Arial', sans-serif" font-size="24" font-weight="900" fill="#2E2E2E" letter-spacing="1px">
+    CODE<tspan fill="#8B4513">ENIGMA</tspan>
+  </text>
+  
+  <!-- Subtle engineering specification style -->
+  <text x="150" y="55" font-family="'Courier New', monospace" font-size="6" fill="#666" font-weight="normal" letter-spacing="1px">
+    secure. transparent. open-source.
+  </text>
+  
+</svg>
