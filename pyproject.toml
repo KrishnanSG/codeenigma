@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "codeenigma"
-version = "1.0.0"
+version = "1.0.1"
 description = "A Python package for code obfuscation using AES and Base64 encryption"
 authors = ["Krishnan S G <krishsg525@gmail.com>"]
 license = "MIT"
@@ -16,6 +16,7 @@ typer = {extras = ["all"], version = "^0.16.0"}
 rich = "^14.0.0"
 setuptools = "^80.9.0"
 cython = "^3.1.2"
+toml = "^0.10.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.0"
