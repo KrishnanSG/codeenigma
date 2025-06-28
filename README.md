@@ -1,4 +1,4 @@
-![Image](static/logo.svg)
+![Image](https://raw.githubusercontent.com/KrishnanSG/codeenigma/main/static/logo.svg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
@@ -14,7 +14,7 @@ This project is inspired by [PyArmor](https://pyarmor.dashingsoft.com/) but with
 
 ## High Level Architecture
 
-![Image](static/CodeEnigma.HLD.svg)
+![Image](https://raw.githubusercontent.com/KrishnanSG/codeenigma/main/static/CodeEnigma.HLD.svg)
 
 The working principle of CodeEnigma is simple:
 1. The user provides the path to the Python module to obfuscate.
