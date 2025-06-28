@@ -12,7 +12,11 @@ from rich.panel import Panel
 from codeenigma import __version__
 from codeenigma.orchestrator import Orchestrator
 
-app = typer.Typer(name="codeenigma", add_completion=True)
+app = typer.Typer(
+    name="codeenigma",
+    help="CodeEnigma: Securely obfuscate and distribute your Python code.",
+    add_completion=True,
+)
 console = Console()
 
 

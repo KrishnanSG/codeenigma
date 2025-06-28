@@ -1,15 +1,28 @@
 [tool.poetry]
 name = "codeenigma"
 version = "1.0.1"
-description = "A Python package for code obfuscation using AES and Base64 encryption"
+description = "A lightweight, open-source tool for Python code obfuscation. CodeEnigma helps protect your logic from reverse engineering and unauthorized access, making it a practical alternative to PyArmor for securely distributing your Python applications"
 authors = ["Krishnan S G <krishsg525@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-urls = { 
-    "Homepage" = "https://github.com/KrishnanSG/codeenigma",
-    "Source" = "https://github.com/KrishnanSG/codeenigma",
-    "Tracker" = "https://github.com/KrishnanSG/codeenigma/issues"
-}
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Security",
+    "Topic :: Utilities",
+    "Operating System :: OS Independent"
+]
+keywords = ["obfuscation", "code protection", "python security", "pyarmor alternative", "secure distribution"]
+
+[tool.poetry.urls]
+Homepage = "https://github.com/KrishnanSG/codeenigma"
+Source = "https://github.com/KrishnanSG/codeenigma"
+Tracker = "https://github.com/KrishnanSG/codeenigma/issues"
+
 
 [tool.poetry.scripts]
 codeenigma = "codeenigma.cli:app"

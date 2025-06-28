@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 
-CodeEnigma is a Python package for lightweight code obfuscation using AES-256 encryption and Base64 encoding. It helps protect your Python code from exposing raw source code while distributing.
+A lightweight, open-source tool for Python code obfuscation. CodeEnigma helps protect your logic from reverse engineering and unauthorized access, making it secure to distribute your Python applications.
 
 ## 🔒 Why CodeEnigma?
 After searching extensively for a free and open-source Python obfuscation tool, I realized that most available options were either paid, closed-source, or opaque in how they worked. I wasn't comfortable letting a black-box tool encrypt my production code without knowing exactly what it was doing — especially when it had access to sensitive logic.
