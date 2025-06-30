@@ -10,6 +10,7 @@ from typing import Optional
 
 import rich
 
+from codeenigma import __version__
 from codeenigma.core import obfuscate_file
 from codeenigma.private import NONCE, SECRET_KEY
 
@@ -66,7 +67,8 @@ execute_secure_code({repr(secure_code)}, globals())
 
     def _generate_setup(self) -> None:
         """Generates a setup.py file for compiling the codeenigma.pyx file"""
-        setup_code = """
+        setup_code = (
+            f"""
 import os
 
 from Cython.Build import cythonize
@@ -87,12 +89,13 @@ codeenigma_extension = Extension(
 # Setup configuration
 setup(
     name="codeenigma_runtime",
-    version="1.0.0",
+    version="{__version__}","""
+            + """
     description="Python code obfuscation tool using AES and Base64 encryption",
     ext_modules=cythonize(
         [codeenigma_extension],
         compiler_directives={
-            "language_level": 3,
+            "language_level": '3',
             "boundscheck": False,
             "wraparound": False,
             "initializedcheck": False,
@@ -108,6 +111,7 @@ setup(
     zip_safe=False,
 )
 """
+        )
         with open("codeenigma_setup.py", "w", encoding="utf-8") as f:
             f.write(setup_code)
 
