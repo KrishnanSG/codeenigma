@@ -1,5 +1,5 @@
 """
-CLI interface for CodeEnigma orchestrator.
+CLI interface for CodeEnigma
 """
 
 from datetime import UTC, datetime
@@ -10,6 +10,7 @@ from rich.console import Console
 from rich.panel import Panel
 
 from codeenigma import __version__
+from codeenigma.enums import FormatType
 from codeenigma.orchestrator import Orchestrator
 
 app = typer.Typer(
@@ -24,11 +25,14 @@ def display_banner():
     """Display a nice CLI banner."""
     console.print(
         Panel.fit(
-            f"""[bold green]A simple, secure and FOSS python code obfuscator using AES and Base64, executed on Cython built runtime for added security. Each file is obfuscated separately using a unique key generated during the initialization.[/bold green]
-[bold yellow]License:[/bold yellow] MIT
-[bold yellow]Author:[/bold yellow] KrishnanSG
-[bold yellow]Version:[/bold yellow] {__version__}""",
-            title="🚀 [bold cyan]Welcome to CodeEnigma[/bold cyan]",
+            """
+[bold green]A lightweight, open-source tool for Python code obfuscation. CodeEnigma helps protect your logic from reverse engineering and unauthorized access, making it secure to distribute your Python applications.[/bold green]
+
+📝 [bold yellow]License:[/bold yellow] MIT
+👤 [bold yellow]Author:[/bold yellow] KrishnanSG
+📦 [bold yellow]Repo:[/bold yellow] https://github.com/KrishnanSG/codeenigma
+""",
+            title=f"🚀 [bold cyan]Welcome to CodeEnigma v{__version__}[/bold cyan]",
             border_style="bright_magenta",
         )
     )
@@ -46,7 +50,14 @@ def obfuscate(
         help="Expiration date for the obfuscated code (YYYY-MM-DD)",
     ),
     output_dir: str = typer.Option(
-        "dist", "--output", "-o", "--dist", help="Output directory for obfuscated files"
+        "cedist",
+        "--output",
+        "-o",
+        "--dist",
+        help="Output directory for obfuscated files",
+    ),
+    format: FormatType = typer.Option(
+        FormatType.WHEEL, "--format", "-f", help="Output format for obfuscated files"
     ),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Show detailed output"),
 ):
@@ -82,7 +93,10 @@ def obfuscate(
         raise typer.Exit(1)
 
     orchestrator = Orchestrator(
-        str(module_path), output_dir, expiration_date=expiration_date
+        str(module_path),
+        output_dir,
+        expiration_date=expiration_date,
+        generate_wheel=(format == "wheel"),
     )
 
     try:

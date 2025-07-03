@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "codeenigma"
-version = "1.0.4"
+version = "1.1.0a0"
 description = "A lightweight, open-source tool for Python code obfuscation. CodeEnigma helps protect your logic from reverse engineering and unauthorized access, making it a practical alternative to PyArmor for securely distributing your Python applications"
 authors = ["Krishnan S G <krishsg525@gmail.com>"]
 license = "MIT"
@@ -33,7 +33,7 @@ cryptography = ">=40.0.4"
 typer = {extras = ["all"], version = ">=0.14.0"}
 rich = ">=13.0.0"
 setuptools = ">=70.0.0"
-cython = "^3.1.2"
+cython = ">=3.0.0"
 toml = ">=0.9.2"
 
 [tool.poetry.group.dev.dependencies]
