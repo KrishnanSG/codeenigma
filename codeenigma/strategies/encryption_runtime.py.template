@@ -1,0 +1,35 @@
+from datetime import datetime, UTC
+import base64
+import marshal
+import zlib
+import types
+try:
+    import rich
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+except ModuleNotFoundError:
+    print("Error: rich and cryptography modules are required to run this code. Please install them using pip install rich cryptography or using poetry add rich cryptography.")
+    exit(1)
+
+NONCE = $nonce
+SECRET_KEY = $secret_key
+
+def execute_secure_code(secure_code: bytes, globals_dict=None) -> None:
+    $expiration_check
+
+    if globals_dict is None:
+        globals_dict = globals()
+
+    aesgcm = AESGCM(SECRET_KEY)
+
+    try:
+        decrypted = aesgcm.decrypt(NONCE, secure_code, None)
+        compressed = base64.b64decode(decrypted)
+        marshaled = zlib.decompress(compressed)
+        code_obj = marshal.loads(marshaled)
+        if isinstance(code_obj, types.CodeType):
+            exec(code_obj, globals_dict)
+        else:
+            raise ValueError("Invalid code object in obfuscated module")
+    except Exception as e:
+        rich.print(f"[bold red]Error executing obfuscated code: {e}[/bold red]")
+        raise
