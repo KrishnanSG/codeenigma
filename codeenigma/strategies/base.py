@@ -11,20 +11,20 @@ class BaseObfuscationStrategy(ABC):
     """
     Abstract base class for obfuscation strategies.
 
-    Important logics are:
+    Logics to handle:
         1. obfuscate method
         2. Template file containing the deobfuscation code
     """
 
     @abstractmethod
-    def obfuscate(self, code: bytes, **kwargs) -> bytes:
+    def obfuscate(self, file_path: Path, **kwargs) -> bytes:
         """
         Obfuscate the given code.
 
         Note: Ensure you have created the template file too for deobfuscation
 
         Args:
-            code: The source code to obfuscate. Should be a bytes object.
+            file_path: Path to the source code to obfuscate
             **kwargs: Additional arguments for the obfuscation process
 
         Returns:
@@ -48,6 +48,12 @@ class BaseObfuscationStrategy(ABC):
         """
         pass
 
+    def get_runtime_code(self) -> str:
+        """
+        Get the runtime code
+        """
+        return generate_runtime(self.template_path, self.template_vars)
+
     def execute(
         self, obfuscated_code: bytes, just_return_runtime_code: bool = False, **kwargs
     ):
@@ -59,7 +65,7 @@ class BaseObfuscationStrategy(ABC):
             just_return_runtime_code: Returns the runtime code only without executing it (useful for generating the wrapper
                 for runtime code)
         """
-        execution_string = generate_runtime(self.template_path, self.template_vars)
+        execution_string = self.get_runtime_code()
 
         if just_return_runtime_code:
             return execution_string
