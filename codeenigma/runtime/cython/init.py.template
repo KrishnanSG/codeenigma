@@ -1,0 +1,9 @@
+import platform
+
+import rich
+
+if platform.system() != $platform:
+    rich.print("codeenigma_runtime was compiled for $platform. You are on a different OS.")
+    exit(1)
+
+from .codeenigma_runtime import execute_secure_code
