@@ -13,15 +13,15 @@ from codeenigma.strategies import BaseObfuscationStrategy
 
 
 class CythonRuntimeBuilder(IRuntimeBuilder):
-
     def __init__(self, strategy: BaseObfuscationStrategy, bundler: IBundler):
-
         super().__init__(strategy, bundler)
 
     @staticmethod
     def create_cython_setup(output_path: Path):
         """Generates a setup.py file for compiling the codeenigma.pyx file"""
-        rich.print("Creating setup.py file for compiling the codeenigma.pyx file")
+        rich.print(
+            "[bold blue]Creating setup.py file for compiling the codeenigma.pyx file [/bold blue]"
+        )
         with open(Path(__file__).parent / "setup.py.template", encoding="utf-8") as f:
             template = Template(f.read())
 
@@ -32,7 +32,9 @@ class CythonRuntimeBuilder(IRuntimeBuilder):
     @staticmethod
     def create_init_file(output_path: Path):
         """Creates the __init__.py file"""
-        rich.print("[bold blue]Creating codeenigma_runtime/__init__.py file[/bold blue]")
+        rich.print(
+            "[bold blue]Creating codeenigma_runtime/__init__.py file[/bold blue]"
+        )
         with open(Path(__file__).parent / "init.py.template", encoding="utf-8") as f:
             template = Template(f.read())
 
@@ -43,18 +45,24 @@ class CythonRuntimeBuilder(IRuntimeBuilder):
     @staticmethod
     def create_pyproject_toml(so_file_path: str, output_path: Path):
         """Creates the pyproject.toml file"""
-        rich.print("[bold blue]Creating pyproject.toml file for codeenigma_runtime pkg[/bold blue]")
-        with open(Path(__file__).parent / "pyproject.toml.template", encoding="utf-8") as f:
+        rich.print(
+            "[bold blue]Creating pyproject.toml file for codeenigma_runtime pkg[/bold blue]"
+        )
+        with open(
+            Path(__file__).parent / "pyproject.toml.template", encoding="utf-8"
+        ) as f:
             template = Template(f.read())
 
-        pyproject_content = template.safe_substitute({"version": repr(__version__), "so_file_path": str(so_file_path)})
+        pyproject_content = template.safe_substitute(
+            {"version": repr(__version__), "so_file_path": str(so_file_path)}
+        )
         with open(output_path / "pyproject.toml", "w", encoding="utf-8") as f:
             f.write(pyproject_content)
 
     def build(self, output_dir: Path):
         """Builds the runtime package"""
 
-        rich.print("[bold cyan]Building the runtime package[/bold cyan]")
+        rich.print("[bold blue]Building the runtime package[/bold blue]")
 
         # Building the .so extension
         # Step 1: Creates the codeenigma.pyx and setup files
@@ -82,6 +90,7 @@ class CythonRuntimeBuilder(IRuntimeBuilder):
 
         # Packing into codeenigma_runtime wheel
 
+        rich.print("[bold blue]\nPacking the runtime package[/bold blue]")
         # Step 3: Creates the __init__.py file
         Path(output_dir / "codeenigma_runtime").mkdir(exist_ok=True)
         shutil.move(so_file, output_dir / "codeenigma_runtime" / so_file.name)

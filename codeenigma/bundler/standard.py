@@ -18,16 +18,19 @@ class StandardBundler(IBundler):
     @staticmethod
     def _check_for_setuptools_project(project_root: Path):
         status = False
-        if (project_root / 'setup.py').exists():
+        if (project_root / "setup.py").exists():
             status = True
 
-        if (project_root / 'pyproject.toml').exists():
+        if (project_root / "pyproject.toml").exists():
             try:
-                with open(project_root / 'pyproject.toml', 'rb') as f:
+                with open(project_root / "pyproject.toml", "rb") as f:
                     import tomllib
+
                     content = tomllib.load(f)
-                    build_backend = content.get('build-system', {}).get('build-backend', '')
-                    status = 'setuptools' in build_backend
+                    build_backend = content.get("build-system", {}).get(
+                        "build-backend", ""
+                    )
+                    status = "setuptools" in build_backend
             except KeyError:
                 status = False
 
@@ -37,7 +40,9 @@ class StandardBundler(IBundler):
                 "Cannot build extensions without setuptools."
             )
 
-    def create_wheel(self, module_path: Path, output_dir: Optional[Path] = None, **kwargs):
+    def create_wheel(
+        self, module_path: Path, output_dir: Optional[Path] = None, **kwargs
+    ):
         self._check_for_setuptools_project(module_path.parent)
         rich.print("[bold blue]Building wheel using standard setuptools[/bold blue]")
         try:
@@ -46,7 +51,7 @@ class StandardBundler(IBundler):
                 ["uv", "pip", "wheel", "--no-deps", "-e", "."],
                 cwd=str(module_path.parent),
                 check=True,
-                capture_output=True
+                capture_output=True,
             )
         except (subprocess.CalledProcessError, FileNotFoundError):
             # Fall back to pip if uv is not available
@@ -54,20 +59,25 @@ class StandardBundler(IBundler):
                 ["pip", "wheel", "--no-deps", "-e", "."],
                 cwd=str(module_path.parent),
                 check=True,
-                capture_output=True
+                capture_output=True,
             )
 
         wheel_file = list((module_path.parent / "dist").glob("*.whl"))[-1]
+        final_wheel_location = wheel_file
 
         if output_dir:
             output_dir.mkdir(exist_ok=True)
-            shutil.move(wheel_file, output_dir / wheel_file.name)
-            shutil.rmtree(output_dir / "dist")
+            final_wheel_location = output_dir / wheel_file.name
+            shutil.move(wheel_file, final_wheel_location)
 
-        rich.print(f"[green]✓ Wheel built successfully ({wheel_file})[/green]")
-        return wheel_file
+        rich.print(
+            f"[green]✓ Wheel built successfully ({final_wheel_location})[/green]"
+        )
+        return final_wheel_location
 
-    def create_extension(self, module_path: Path, output_dir: Optional[Path] = None, **kwargs):
+    def create_extension(
+        self, module_path: Path, output_dir: Optional[Path] = None, **kwargs
+    ):
         # Build the extension in-place
         self._check_for_setuptools_project(module_path.parent)
         subprocess.run(

@@ -9,9 +9,13 @@ class IBundler(ABC):
     """
 
     @abstractmethod
-    def create_wheel(self, module_path: Path, output_dir: Optional[Path] = None, **kwargs) -> Path:
+    def create_wheel(
+        self, module_path: Path, output_dir: Optional[Path] = None, **kwargs
+    ) -> Path:
         pass
 
     @abstractmethod
-    def create_extension(self, module_path: Path, output_dir: Optional[Path] = None, **kwargs) -> Path:
+    def create_extension(
+        self, module_path: Path, output_dir: Optional[Path] = None, **kwargs
+    ) -> Path:
         pass

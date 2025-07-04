@@ -36,14 +36,17 @@ class PoetryBundler(IBundler):
         )
 
         wheel_file = list((module_path.parent / "dist").glob(f"*{version}*.whl"))[-1]
+        final_wheel_location = wheel_file
 
         if output_dir:
             output_dir.mkdir(exist_ok=True)
-            shutil.move(wheel_file, output_dir / wheel_file.name)
-            shutil.rmtree(output_dir / "dist")
+            final_wheel_location = output_dir / wheel_file.name
+            shutil.move(wheel_file, final_wheel_location)
 
-        rich.print(f"[green]✓ Wheel built successfully ({wheel_file})[/green]")
-        return wheel_file
+        rich.print(
+            f"[green]✓ Wheel built successfully ({final_wheel_location})[/green]"
+        )
+        return final_wheel_location
 
     def create_extension(
         self, module_path: Path, output_dir: Optional[Path] = None, **kwargs

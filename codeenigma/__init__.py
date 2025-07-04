@@ -11,3 +11,5 @@ except PackageNotFoundError:
             __version__ = content["tool"]["poetry"]["version"]
     except FileNotFoundError:
         __version__ = "undefined"
+
+__all__ = ["__version__"]
