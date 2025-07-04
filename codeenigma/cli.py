@@ -10,8 +10,11 @@ from rich.console import Console
 from rich.panel import Panel
 
 from codeenigma import __version__
-from codeenigma.enums import FormatType
+from codeenigma.bundler.poetry import PoetryBundler
 from codeenigma.orchestrator import Orchestrator
+from codeenigma.private import NONCE, SECRET_KEY
+from codeenigma.runtime.cython.builder import CythonRuntimeBuilder
+from codeenigma.strategies import CodeEnigmaObfuscationStrategy
 
 app = typer.Typer(
     name="codeenigma",
@@ -56,9 +59,6 @@ def obfuscate(
         "--dist",
         help="Output directory for obfuscated files",
     ),
-    format: FormatType = typer.Option(
-        FormatType.WHEEL, "--format", "-f", help="Output format for obfuscated files"
-    ),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Show detailed output"),
 ):
     """Obfuscate a Python module and its dependencies."""
@@ -92,17 +92,16 @@ def obfuscate(
         )
         raise typer.Exit(1)
 
-    orchestrator = Orchestrator(
-        str(module_path),
-        output_dir,
-        expiration_date=expiration_date,
-        generate_wheel=(format == "wheel"),
-    )
+    s = CodeEnigmaObfuscationStrategy(SECRET_KEY, NONCE)
+    b = PoetryBundler()
+    r = CythonRuntimeBuilder(s, b)
+
+    o = Orchestrator(Path(module_path), s, r)
 
     try:
         if verbose:
-            console.print("\n[bold]Starting obfuscation process...[/bold]")
-        orchestrator.obfuscate_module()
+            console.print("\n[bold]Starting codeenigma...[/bold]")
+        o.run()
 
         if verbose:
             console.print(

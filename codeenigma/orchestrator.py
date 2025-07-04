@@ -88,7 +88,6 @@ class Orchestrator:
 
     def run_obfuscation(self):
         """Orchestrates the complete obfuscation process for the target module"""
-        # Step 1: Process all Python files in the module
         py_files = list(self.module_path.glob("**/*.py"))
         if not py_files:
             rich.print("[yellow]No Python files found to obfuscate.[/yellow]")
@@ -96,9 +95,22 @@ class Orchestrator:
 
         for idx, py_file in enumerate(py_files):
             rich.print(
-                f"[bold white]({idx + 1}/{len(py_files)}) Obfuscating {py_file}[/bold white]"
+                f"[white]({idx + 1}/{len(py_files)}) Obfuscating {py_file}[/white]"
             )
             self._process_file(py_file)
+
+    def build_obfuscated_wheel(self):
+        """Builds the obfuscated wheel for the module"""
+        shutil.copy(
+            self.module_path.parent / "pyproject.toml",
+            self.output_dir / "pyproject.toml",
+        )
+        self.runtime_builder.bundler.create_wheel(
+            self.output_dir / self.module_path.name, self.output_dir, remove_readme=True
+        )
+
+        # remove pyproject.toml
+        os.remove(self.output_dir / "pyproject.toml")
 
     def run(self):
         # Base Checks
@@ -117,9 +129,11 @@ class Orchestrator:
         rich.print("[bold magenta]\n[2/3] Creating runtime package...[/bold magenta]")
         self.runtime_builder.build(self.output_dir)
 
-        rich.print("[bold magenta]\n[3/3] Creating wheel for module...[/bold magenta]")
-        self.runtime_builder.bundler.create_wheel(self.module_path, self.output_dir)
+        rich.print(
+            "[bold magenta]\n[3/3] Creating wheel for obfuscated module...[/bold magenta]"
+        )
+        self.build_obfuscated_wheel()
 
         # Cleanup
         shutil.rmtree(self.output_dir / "dist", ignore_errors=True)
-        os.remove(self.output_dir / "pyproject.toml")
+

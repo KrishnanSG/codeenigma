@@ -9,6 +9,14 @@ from codeenigma.bundler.base import IBundler
 
 
 class PoetryBundler(IBundler):
+    @staticmethod
+    def remove_readme_before_build(pyproject_path: Path):
+        with open(pyproject_path) as f:
+            content = f.read()
+
+        with open(pyproject_path, "w") as f:
+            f.write(content.replace('readme = "README.md"', ""))
+
     def create_wheel(
         self, module_path: Path, output_dir: Optional[Path] = None, **kwargs
     ):
@@ -27,6 +35,9 @@ class PoetryBundler(IBundler):
                 raise Exception(
                     "Invalid pyproject.toml file, not in poetry format"
                 ) from e
+
+        if kwargs.get("remove_readme", True):
+            self.remove_readme_before_build(module_path.parent / "pyproject.toml")
 
         rich.print("[bold blue]Building wheel using poetry[/bold blue]")
         subprocess.run(

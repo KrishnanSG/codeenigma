@@ -27,7 +27,6 @@ class CodeEnigmaObfuscationStrategy(BaseObfuscationStrategy):
         return {
             "nonce": repr(self.nonce),
             "secret_key": repr(self.secret_key),
-            "expiration_check": "# no check",
         }
 
     def obfuscate(self, file_path: str, **kwargs) -> bytes:

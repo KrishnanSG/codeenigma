@@ -14,7 +14,6 @@ NONCE = $nonce
 SECRET_KEY = $secret_key
 
 def execute_secure_code(secure_code: bytes, globals_dict=None) -> None:
-    $expiration_check
 
     if globals_dict is None:
         globals_dict = globals()
