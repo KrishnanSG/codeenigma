@@ -1,10 +1,8 @@
 import os
 import shutil
-from datetime import datetime
 from pathlib import Path
 from shutil import rmtree
 from string import Template
-from typing import Optional
 
 import rich
 
@@ -17,12 +15,6 @@ class Orchestrator:
 
     This class handles the complete workflow of obfuscating Python modules,
     including file processing, code transformation, and runtime environment setup.
-
-    Attributes:
-        module_path: Path to the Python module to be obfuscated.
-        output_dir: Directory where obfuscated files will be saved. Defaults to 'dist'.
-        expiration_date: Optional datetime object specifying when the obfuscated
-            code should expire. If provided, the code will stop working after this date.
     """
 
     def __init__(
@@ -31,13 +23,11 @@ class Orchestrator:
         strategy: BaseObfuscationStrategy,
         runtime_builder: IRuntimeBuilder,
         output_dir: Path = Path("cedist"),
-        expiration_date: Optional[datetime] = None,
     ):
         self.module_path = Path(module_path)
         self.strategy = strategy
         self.runtime_builder = runtime_builder
         self.output_dir = Path(output_dir)
-        self.expiration_date = expiration_date
 
     def _create_obfuscation_file(self, file_path: Path, output_path: Path) -> None:
         """Creates an obfuscated version of a single Python file.
@@ -136,4 +126,3 @@ class Orchestrator:
 
         # Cleanup
         shutil.rmtree(self.output_dir / "dist", ignore_errors=True)
-

@@ -11,6 +11,7 @@ from rich.panel import Panel
 
 from codeenigma import __version__
 from codeenigma.bundler.poetry import PoetryBundler
+from codeenigma.extensions import ExpiryExtension
 from codeenigma.orchestrator import Orchestrator
 from codeenigma.private import NONCE, SECRET_KEY
 from codeenigma.runtime.cython.builder import CythonRuntimeBuilder
@@ -92,11 +93,17 @@ def obfuscate(
         )
         raise typer.Exit(1)
 
-    s = CodeEnigmaObfuscationStrategy(SECRET_KEY, NONCE)
-    b = PoetryBundler()
-    r = CythonRuntimeBuilder(s, b)
+    strategy = CodeEnigmaObfuscationStrategy(SECRET_KEY, NONCE)
+    bundler = PoetryBundler()
+    extensions = []
 
-    o = Orchestrator(Path(module_path), s, r)
+    if expiration_date:
+        e = ExpiryExtension(expiration_date)
+        extensions.append(e)
+
+    r = CythonRuntimeBuilder(strategy, bundler, extensions)
+
+    o = Orchestrator(Path(module_path), strategy, r, output_dir=Path(output_dir))
 
     try:
         if verbose:

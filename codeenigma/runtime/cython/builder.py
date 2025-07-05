@@ -1,20 +1,28 @@
 import os
 import platform
 import shutil
+from collections.abc import Sequence
 from pathlib import Path
 from string import Template
+from typing import Optional
 
 import rich
 
 from codeenigma import __version__
 from codeenigma.bundler import IBundler
+from codeenigma.extensions.base import IExtension
 from codeenigma.runtime.base import IRuntimeBuilder
 from codeenigma.strategies import BaseObfuscationStrategy
 
 
 class CythonRuntimeBuilder(IRuntimeBuilder):
-    def __init__(self, strategy: BaseObfuscationStrategy, bundler: IBundler):
-        super().__init__(strategy, bundler)
+    def __init__(
+        self,
+        strategy: BaseObfuscationStrategy,
+        bundler: IBundler,
+        extensions: Optional[Sequence[IExtension]] = None,
+    ):
+        super().__init__(strategy, bundler, extensions=extensions)
 
     @staticmethod
     def create_cython_setup(output_path: Path):
@@ -59,6 +67,15 @@ class CythonRuntimeBuilder(IRuntimeBuilder):
         with open(output_path / "pyproject.toml", "w", encoding="utf-8") as f:
             f.write(pyproject_content)
 
+    def prepare_runtime_code(self, runtime_pyx_path: Path):
+        with open(runtime_pyx_path, "w", encoding="utf-8") as f:
+            code = self.strategy.get_runtime_code()
+
+            for extension in self.extensions:
+                code += extension.get_code()
+
+            f.write(code)
+
     def build(self, output_dir: Path):
         """Builds the runtime package"""
 
@@ -67,10 +84,7 @@ class CythonRuntimeBuilder(IRuntimeBuilder):
         # Building the .so extension
         # Step 1: Creates the codeenigma.pyx and setup files
         output_dir.mkdir(exist_ok=True)
-        with open(output_dir / "codeenigma_runtime.pyx", "w", encoding="utf-8") as f:
-            code = self.strategy.get_runtime_code()
-            f.write(code)
-
+        self.prepare_runtime_code(output_dir / "codeenigma_runtime.pyx")
         self.create_cython_setup(output_dir)
 
         # Step 2: Compiles the codeenigma.pyx file using the bundler to .so

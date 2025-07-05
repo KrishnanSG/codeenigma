@@ -1,0 +1,20 @@
+
+# ---- Expiry Extension ----
+
+def expiry_extension():
+
+    import datetime
+    from datetime import UTC
+    import rich
+
+    EXPIRY_DATE = $expiry_date
+
+    def check_expiry():
+        now = datetime.datetime.now(tz=UTC)
+        if now > EXPIRY_DATE:
+            rich.print(f"[bold red]Code expired on {EXPIRY_DATE.strftime('%B %d, %Y %I:%M %p')} as per build time. This code can't be executed any further. Request the module owner to provide you with a new code. [/bold red]")
+            exit(1)
+
+    check_expiry()
+
+expiry_extension()
