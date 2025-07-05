@@ -1,9 +1,9 @@
 ![Image](https://raw.githubusercontent.com/KrishnanSG/codeenigma/main/static/logo.svg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python Version](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![PyPI](https://img.shields.io/pypi/v/codeenigma)](https://pypi.org/project/codeenigma/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![CodeFactor](https://www.codefactor.io/repository/github/krishnansg/codeenigma/badge)](https://www.codefactor.io/repository/github/krishnansg/codeenigma)
 [![Downloads](https://static.pepy.tech/badge/codeenigma)](https://pepy.tech/project/codeenigma)
 
 
