@@ -73,11 +73,19 @@ class PoetryBundler(IBundler):
             )
 
         rich.print("[bold blue]Building extension using poetry[/bold blue]")
-        subprocess.run(
-            ["poetry", "run", "python", "setup.py", "build_ext", "--inplace"],
-            cwd=str(location),
-            check=True,
-        )
+        try:
+            subprocess.run(
+                ["poetry", "run", "python", "setup.py", "build_ext", "--inplace"],
+                cwd=str(location),
+                check=True,
+            )
+        except subprocess.CalledProcessError:
+            import sys
+            subprocess.run(
+                [sys.executable, "setup.py", "build_ext", "--inplace"],
+                cwd=str(location),
+                check=True,
+            )
 
         so_file = list(location.glob("*.so"))[-1]
         # clean up intermediate files
