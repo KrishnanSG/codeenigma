@@ -5,7 +5,8 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![CodeFactor](https://www.codefactor.io/repository/github/krishnansg/codeenigma/badge)](https://www.codefactor.io/repository/github/krishnansg/codeenigma)
 [![Downloads](https://static.pepy.tech/badge/codeenigma)](https://pepy.tech/project/codeenigma)
-
+[![CI](https://github.com/KrishnanSG/codeenigma/actions/workflows/main.yml/badge.svg)](https://github.com/KrishnanSG/codeenigma/actions)
+[![Coverage](https://raw.githubusercontent.com/KrishnanSG/codeenigma/python-coverage-comment-action-data/badge.svg)](https://github.com/KrishnanSG/codeenigma/actions/workflows/python-coverage-comment-action-data.yml)
 
 A lightweight, open-source tool for Python code obfuscation. CodeEnigma helps protect your logic from reverse engineering and unauthorized access, making it secure to distribute your Python applications.
 
