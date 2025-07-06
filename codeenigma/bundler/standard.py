@@ -21,7 +21,7 @@ class StandardBundler(IBundler):
         if (project_root / "setup.py").exists():
             status = True
 
-        if (project_root / "pyproject.toml").exists():
+        elif (project_root / "pyproject.toml").exists():
             try:
                 with open(project_root / "pyproject.toml", "rb") as f:
                     import tomllib
@@ -56,7 +56,12 @@ class StandardBundler(IBundler):
         except (subprocess.CalledProcessError, FileNotFoundError):
             # Fall back to pip if uv is not available
             subprocess.run(
-                ["pip", "wheel", "--no-deps", "-e", "."],
+                ["pip", "install", "build"],
+                check=True,
+                capture_output=True,
+            )
+            subprocess.run(
+                [sys.executable, "-m", "build", "--wheel"],
                 cwd=str(module_path.parent),
                 check=True,
                 capture_output=True,
@@ -80,15 +85,21 @@ class StandardBundler(IBundler):
     ):
         # Build the extension in-place
         self._check_for_setuptools_project(module_path.parent)
+        if (module_path.parent / "setup.py").exists():
+            location = module_path.parent
+
+        elif (module_path / "setup.py").exists():
+            location = module_path
+
         subprocess.run(
             [sys.executable, "setup.py", "build_ext", "--inplace"],
-            cwd=str(module_path.parent),
+            cwd=str(location),
             check=True,
         )
 
-        so_file = list(module_path.parent.glob("*.so"))[-1]
+        so_file = list(location.glob("*.so"))[-1]
         # clean up intermediate files
-        shutil.rmtree(module_path.parent / "build")
+        shutil.rmtree(location / "build")
 
         final_so_location = so_file
         if output_dir:
