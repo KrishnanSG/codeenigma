@@ -10,7 +10,7 @@
 A lightweight, open-source tool for Python code obfuscation. CodeEnigma helps protect your logic from reverse engineering and unauthorized access, making it secure to distribute your Python applications.
 
 ## 🔒 Why CodeEnigma?
-After searching extensively for a free and open-source Python obfuscation tool, I realized that most available options were either paid, closed-source, or opaque in how they worked. I wasn't comfortable letting a black-box tool encrypt my production code without knowing exactly what it was doing — especially when it had access to sensitive logic.
+After searching extensively for a free and open-source Python obfuscation tool, I realized that most available options were either paid, closed-source, or opaque in how they worked. I wasn't comfortable letting a black-box tool obfuscate my production code without knowing exactly what it was doing — especially when it had access to sensitive logic.
 
 So I built **CodeEnigma** — a transparent, self-contained solution that gives you full control over the obfuscation process, with no hidden logic and no external servers involved. 
 
