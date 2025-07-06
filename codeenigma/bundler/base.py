@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Optional
 
 
-class IBundler(ABC):
+class IBundler(ABC):  # pragma: no cover
     """
     Interface for bundling modules into a wheels/extensions.
     """

@@ -41,6 +41,8 @@ poetry = ">=2.0.0"
 pytest = "^8.0.0"
 pytest-cov = "^4.1.0"
 ruff = "^0.12.0"
+coverage = "^7.9.2"
+pytest-xdist = "^3.8.0"
 
 
 [tool.poetry.group.build.dependencies]
@@ -87,3 +89,8 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.coverage.run]
 relative_files = true
+omit = [
+    "tests/*",
+    "setup.py",
+    "*/__init__.py",
+]

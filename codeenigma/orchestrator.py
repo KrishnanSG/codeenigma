@@ -92,8 +92,12 @@ class Orchestrator:
     def build_obfuscated_wheel(self):
         """Builds the obfuscated wheel for the module"""
         if not (self.module_path.parent / "pyproject.toml").exists():
-            rich.print("[yellow]Skipping obfuscated wheel build, since no pyproject.toml found in the module. Hence can't build obfuscated module into wheel. Consider creating a pyproject.toml file in the module directory. Refer pep621 or poetry for more details.[/yellow]")
-            rich.print(f"[white]You can build the wheel manually later too. You can find the obfuscated module in the {self.output_dir} directory.[/white]")
+            rich.print(
+                "[yellow]Skipping obfuscated wheel build, since no pyproject.toml found in the module. Hence can't build obfuscated module into wheel. Consider creating a pyproject.toml file in the module directory. Refer pep621 or poetry for more details.[/yellow]"
+            )
+            rich.print(
+                f"[white]You can build the wheel manually later too. You can find the obfuscated module in the {self.output_dir} directory.[/white]"
+            )
             return 0
 
         shutil.copy(

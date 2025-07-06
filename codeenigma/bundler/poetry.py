@@ -81,6 +81,7 @@ class PoetryBundler(IBundler):
             )
         except subprocess.CalledProcessError:
             import sys
+
             subprocess.run(
                 [sys.executable, "setup.py", "build_ext", "--inplace"],
                 cwd=str(location),

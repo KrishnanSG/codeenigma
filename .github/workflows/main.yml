@@ -1,0 +1,64 @@
+name: CodeEnigma CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - '*'
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ '3.11', '3.12' ]
+        experimental: [ false ]
+        include:
+          - python-version: '3.13' # idea is to test if module is good for python 3.13
+            experimental: true
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Install poetry, coverage and pytest
+        run: pipx install poetry coverage pytest
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'poetry'
+
+      - name: Install Python dependencies
+        run: |
+          python --version
+          python -m venv venv
+          source venv/bin/activate
+          poetry install --all-extras
+
+      - name: Run unit tests
+        run: |
+          export RUN_ENV='GITHUB'
+          source venv/bin/activate
+          poetry run coverage run -m pytest tests --junitxml=report.xml
+          poetry run coverage report
+          poetry run coverage html
+
+      - name: Coverage comment
+        id: coverage_comment
+        uses: py-cov-action/python-coverage-comment-action@v3
+        if: ${{ matrix.python-version }} == '3.12'
+        with:
+          GITHUB_TOKEN: ${{ github.token }}

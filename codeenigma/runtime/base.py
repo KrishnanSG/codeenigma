@@ -8,7 +8,7 @@ from codeenigma.extensions.base import IExtension
 from codeenigma.strategies.base import BaseObfuscationStrategy
 
 
-class IRuntimeBuilder(ABC):
+class IRuntimeBuilder(ABC):  # pragma: no cover
     """
     Interface for runtime builder
 

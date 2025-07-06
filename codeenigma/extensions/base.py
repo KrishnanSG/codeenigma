@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class IExtension(ABC):
+class IExtension(ABC):  # pragma: no cover
     """
     Interface for extensions to the runtime code.
 

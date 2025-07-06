@@ -1,3 +1,4 @@
+# pragma: no cover
 from importlib.metadata import PackageNotFoundError, version
 
 try:

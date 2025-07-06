@@ -9,7 +9,7 @@ import rich
 from codeenigma.bundler.base import IBundler
 
 
-class StandardBundler(IBundler):
+class StandardBundler(IBundler):  # pragma: no cover
     """
     A bundler that uses standard Python packaging tools (setuptools) and is compatible with uv.
     Works with setup.py or pyproject.toml (setuptools backend).

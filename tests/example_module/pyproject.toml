@@ -1,0 +1,11 @@
+[tool.poetry]
+name = "example_module"
+version = "1.0.0"
+description = "Sample Test Module"
+
+[tool.poetry.dependencies]
+python = ">=3.10, <3.14"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

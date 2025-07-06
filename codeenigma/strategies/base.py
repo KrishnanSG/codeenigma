@@ -7,7 +7,7 @@ from pathlib import Path
 from string import Template
 
 
-class BaseObfuscationStrategy(ABC):
+class BaseObfuscationStrategy(ABC):  # pragma: no cover
     """
     Abstract base class for obfuscation strategies.
 
