@@ -3,12 +3,14 @@ import base64
 import marshal
 import zlib
 import types
+import sys
+
 try:
     import rich
     from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 except ModuleNotFoundError:
     print("Error: rich and cryptography modules are required to run this code. Please install them using pip install rich cryptography or using poetry add rich cryptography.")
-    exit(1)
+    sys.exit(1)
 
 NONCE = $nonce
 SECRET_KEY = $secret_key
