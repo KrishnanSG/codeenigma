@@ -1,7 +1,6 @@
 import os
 import subprocess
 import sys
-import time
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from unittest import TestCase
@@ -9,6 +8,7 @@ from unittest import TestCase
 from typer.testing import CliRunner
 
 from codeenigma.cli import app
+from codeenigma.extensions import ExpiryExtension
 
 
 class TestCodeEnigmaCLI(TestCase):  # pragma: no cover
@@ -60,7 +60,7 @@ class TestCodeEnigmaCLI(TestCase):  # pragma: no cover
             Path(__file__).parent / "example_module" / "example_module"
         )
 
-        expiration_date = str((datetime.now(UTC) + timedelta(seconds=5)).isoformat())
+        expiration_date = str((datetime.now(UTC) + timedelta(days=1)).isoformat())
 
         result = self.runner.invoke(
             app,
@@ -88,19 +88,16 @@ class TestCodeEnigmaCLI(TestCase):  # pragma: no cover
             env=env,
         )
 
+        self.assertNotIn("Code expired on", result.stdout)
         self.assertIn("Hello, World!", result.stdout)
         self.assertIn("55", result.stdout)
         self.assertIn("3", result.stdout)
         self.assertIn("6", result.stdout)
 
-        # Check for code expiration
-        time.sleep(6)
-        result = subprocess.run(
-            [sys.executable, str(out_path)],
-            capture_output=True,
-            cwd=str(Path(__file__).parent / "cedist2"),
-            text=True,
-            env=env,
-        )
-        self.assertIn("Code expired on", result.stdout)
-        self.assertEqual(result.returncode, 1)
+    def test_expiry_extension_blocks_expired_code(self):
+        expiry_extension = ExpiryExtension(datetime.now(UTC) - timedelta(seconds=1))
+
+        with self.assertRaises(SystemExit) as context:
+            exec(expiry_extension.get_code(), {})
+
+        self.assertEqual(context.exception.code, 1)
